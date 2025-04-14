@@ -26,13 +26,29 @@
 #define RCC_CFGR_REG_OFFSET  0x08UL
 #define RCC_CFGR_REG_ADDR	 ((RCC_CFGR_REG_OFFSET) + (RCC_BASE_ADDR));
 
+#define GPIOA_BASE_ADDR      0x40020000
+
 int main(void)
 {
-	uint32_t* *pRccCfgrReg = (uint32_t*) RCC_CFGR_REG_ADDR;
+	uint32_t* pRccCfgrReg = (uint32_t*) RCC_CFGR_REG_ADDR;
 
 	//Clear bit 21 and 22 to set HSI as clock source
 	*pRccCfgrReg &= ~(1 << 21);
 	*pRccCfgrReg &= ~(1 << 22);
+
+	//Set PA8 to AF0 mode to act as MC01 signal
+	uint32_t* pRccAhb1Enr = (uint32_t*) (RCC_BASE_ADDR + 0x30);
+	*pRccAhb1Enr |= (1 << 0); //Enables GPIOA Peripheral Clock
+
+	//Configure mode of GPIOA pin 8 to alternate function mode
+	uint32_t* pGPIOAModeReg = (uint32_t*) (GPIOA_BASE_ADDR);
+	*pGPIOAModeReg &= (0x3 << 16); //Clear
+	*pGPIOAModeReg |= (0x2 << 16); //Set
+
+	//Configure alternate function register to set mode to 0 for PA8
+	uint32_t *pGPIOAAltFunHighReg = (uint32_t*) (GPIOA_BASE_ADDR + 0x24);
+	*pGPIOAAltFunHighReg &= (0xf << 0);
+
 
 
     /* Loop forever */
