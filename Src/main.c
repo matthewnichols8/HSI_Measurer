@@ -28,7 +28,11 @@
 
 int main(void)
 {
+	uint32_t* *pRccCfgrReg = (uint32_t*) RCC_CFGR_REG_ADDR;
 
+	//Clear bit 21 and 22 to set HSI as clock source
+	*pRccCfgrReg &= ~(1 << 21);
+	*pRccCfgrReg &= ~(1 << 22);
 
 
     /* Loop forever */
