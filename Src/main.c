@@ -22,8 +22,15 @@
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
+#define RCC_BASE_ADDR        0x40023800UL
+#define RCC_CFGR_REG_OFFSET  0x08UL
+#define RCC_CFGR_REG_ADDR	 ((RCC_CFGR_REG_OFFSET) + (RCC_BASE_ADDR));
+
 int main(void)
 {
+
+
+
     /* Loop forever */
 	for(;;);
 }
